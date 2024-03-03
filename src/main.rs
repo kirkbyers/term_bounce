@@ -1,7 +1,7 @@
 pub mod app;
 pub mod ui;
-pub mod tui;
+pub mod term;
 
 fn main() {
-    println!("Hello, world!");
+    term::Term::new().unwrap().run().unwrap();
 }

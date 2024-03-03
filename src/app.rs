@@ -14,12 +14,16 @@ impl App {
 
     pub fn new_with_values(x: u16, y: u16) -> App {
         App {
-            ball_size: (10, 10),
+            ball_size: (1, 1),
             ball_center: (x, y),
             ball_velocity: (1, 1),
             ball_bounds: (100, 100),
             size_increment: 1,
         }
+    }
+
+    pub fn update_bounds(&mut self, x: u16, y: u16) {
+        self.ball_bounds = (x, y);
     }
 
     pub fn update_center(&mut self) {
