@@ -30,7 +30,7 @@ impl Term {
             should_quit: false,
             terminal: Terminal::new(CrosstermBackend::new(stderr()))?,
             app: App::new(),
-            refresh_rate: time::Duration::from_millis(100),
+            refresh_rate: time::Duration::from_millis(10),
         })
     }
 
@@ -39,16 +39,21 @@ impl Term {
             draw(frame, &self.app);
         })?;
         let mut next_update = Instant::now();
+        
+        let size = self.terminal.size()?;
+        let (x, y) = (size.width, size.height);
+        self.app.update_bounds(x, y);
         while !self.should_quit {
             if event::poll(time::Duration::from_millis(500))? {
-                if let event::Event::Key(key) = event::read()? {
-                    self.on_key(key);
-                }
-            }
-            if Instant::now() >= next_update {
                 let size = self.terminal.size()?;
                 let (x, y) = (size.width, size.height);
                 self.app.update_bounds(x, y);
+                if let event::Event::Key(key) = event::read()? {
+                    self.app.update_bounds(x, y);
+                    self.on_key(key);
+                }
+            }
+            if Instant::now() >= next_update {  
                 self.app.update_center();
                 self.terminal.draw(|frame| {
                     draw(frame, &self.app);
