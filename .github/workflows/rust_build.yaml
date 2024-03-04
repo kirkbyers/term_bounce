@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, macos-14]
+    runs-on: ${{ matrix.platform.os }}
     steps:
     - uses: actions/checkout@v3
     - name: Build release
